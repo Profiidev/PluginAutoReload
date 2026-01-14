@@ -1,0 +1,22 @@
+{
+    "Group": "io.profidev",
+    "Name": "FirstHytaleMod",
+    "Version": "0.0.1",
+    "Description": "Simple first plugins tests",
+    "Authors": [
+        {
+            "Name": "Profidev"
+        }
+    ],
+    "Website": "github.com/ProfiiDev",
+    "ServerVersion": "*",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        
+    },
+    "DisabledByDefault": false,
+    "Main": "io.profidev.FirstHytaleMod",
+    "IncludesAssetPack": true
+}
