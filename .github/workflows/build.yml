@@ -41,9 +41,9 @@ jobs:
           echo "HYTALE_API_KEY=$(cat .hytale-downloader-credentials.json)" >> $GITHUB_OUTPUT
 
           # Move server jar to expected location
-          PATH=~/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Server/
-          mkdir -p $PATH
-          mv Server/*.jar $PATH
+          INSTALL_DIR=~/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Server/
+          mkdir -p $INSTALL_DIR
+          mv Server/*.jar $INSTALL_DIR
       - name: Update HYTALE_API_KEY Secret
         uses: actions/github-script@v8
         env:
