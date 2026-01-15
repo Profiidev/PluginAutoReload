@@ -36,7 +36,8 @@ bin/
 /nbdist/
 /.nb-gradle/
 
-/.vscode/
+/.vscode/*
+!/.vscode/tasks.json
 /testing/
 
 ### Mac OS ###
