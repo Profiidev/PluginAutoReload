@@ -9,6 +9,7 @@ on:
 
 jobs:
   create-release-tag:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'release-version') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
