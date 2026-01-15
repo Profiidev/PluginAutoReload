@@ -1,38 +1,62 @@
 package io.profidev.PluginAutoReload;
 
+import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.Options;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
-import com.hypixel.hytale.server.core.universe.Universe;
-import com.hypixel.hytale.server.core.universe.world.WorldConfig;
+import com.hypixel.hytale.server.core.plugin.PluginManager;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PluginAutoReload extends JavaPlugin {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+    private final @Nonnull List<PluginWatcher> watchers;
+
     public PluginAutoReload(@Nonnull JavaPluginInit init) {
         super(init);
+        watchers = new ArrayList<>();
     }
 
     @Override
     protected void setup() {
-        LOGGER.atInfo().log("Setting up plugin " + this.getName());
-        this.getCommandRegistry()
-                .registerCommand(new ExampleCommand(this.getName(), this.getManifest().getVersion().toString()));
+        LOGGER.atInfo().log("Setting up directory watchers for plugin reloading.");
+        var thisPluginId = new PluginIdentifier(this.getManifest());
 
-        var universe = Universe.get();
-        var worlds = universe.getWorlds();
-        var testWorld = "test_world";
+        LOGGER.atInfo().log("Watching core mods directory: " + PluginManager.MODS_PATH);
+        var path = PluginManager.MODS_PATH.toAbsolutePath();
+        watchers.add(new PluginWatcher(path, thisPluginId));
 
-        for (var world : worlds.keySet()) {
-            LOGGER.atInfo().log("Existing world: " + world);
+        for (var modsPath : Options.getOptionSet().valuesOf(Options.MODS_DIRECTORIES)) {
+            LOGGER.atInfo().log("Watching mods directory: " + modsPath);
+            var modsDirPath = modsPath.toAbsolutePath();
+            watchers.add(new PluginWatcher(modsDirPath, thisPluginId));
         }
+    }
 
-        if (!worlds.containsKey(testWorld)) {
-            var config = new WorldConfig();
-            // universe.makeWorld(testWorld, testWorld, config);
+    @Override
+    protected void start() {
+        LOGGER.atInfo().log("Starting directory watchers for plugin reloading.");
+        for (var watcher : watchers) {
+            watcher.start();
         }
+    }
+
+    @Override
+    protected void shutdown() {
+        LOGGER.atInfo().log("Stopping directory watchers for plugin reloading.");
+        for (var watcher : watchers) {
+            watcher.interrupt();
+            try {
+                watcher.join();
+            } catch (InterruptedException e) {
+                LOGGER.atWarning().withCause(e).log("Interrupted while waiting for watcher to stop.");
+            }
+        }
+        LOGGER.atInfo().log("Finished stopping directory watchers.");
     }
 }

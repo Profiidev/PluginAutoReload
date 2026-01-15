@@ -92,9 +92,6 @@ idea.project.settings.runConfigurations {
 
         programParameters = "--allow-op --assets=$hytaleHome/install/$patchline/package/game/latest/Assets.zip"
 
-        if (includes_pack.toBoolean()) {
-            programParameters += " --mods=${sourceSets.main.java.srcDirs.first().parentFile.absolutePath}"
-        }
         if (load_user_mods.toBoolean()) {
             programParameters += " --mods=$hytaleHome/UserData/Mods"
         }
