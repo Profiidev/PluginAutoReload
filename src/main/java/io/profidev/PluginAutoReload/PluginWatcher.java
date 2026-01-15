@@ -15,6 +15,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
+import java.util.UUID;
 import java.util.jar.JarFile;
 
 public class PluginWatcher extends Thread {
@@ -27,10 +28,14 @@ public class PluginWatcher extends Thread {
 
     private final @Nonnull Path path;
     private final @Nonnull PluginIdentifier thisPluginId;
+    private final @Nonnull Debouncer debouncer;
+    private final @Nonnull UUID id;
 
-    public PluginWatcher(@Nonnull Path path, @Nonnull PluginIdentifier thisPluginId) {
+    public PluginWatcher(@Nonnull Path path, @Nonnull PluginIdentifier thisPluginId, @Nonnull Debouncer debouncer) {
         this.path = path;
         this.thisPluginId = thisPluginId;
+        this.debouncer = debouncer;
+        this.id = UUID.randomUUID();
     }
 
     @Override
@@ -46,15 +51,19 @@ public class PluginWatcher extends Thread {
                 for (var event : key.pollEvents()) {
                     var kind = event.kind();
                     var changed = path.resolve((Path) event.context());
-                    LOGGER.atInfo().log("Detected " + kind.name() + " on " + changed + ".");
 
-                    var pluginId = getPluginIdFromJar(changed);
-                    if (pluginId == null || pluginId.getGroup().equals("Hytale") || pluginId == thisPluginId) {
-                        continue;
-                    }
+                    // Wait for writes to settle before reloading
+                    debouncer.debounce(id, () -> {
+                        LOGGER.atInfo().log("Detected " + kind.name() + " on " + changed + ".");
+                        var pluginId = getPluginIdFromJar(changed);
+                        if (pluginId == null || pluginId.getGroup().equals("Hytale") || pluginId == thisPluginId) {
+                            return;
+                        }
 
-                    LOGGER.atInfo().log("Reloading plugin: " + pluginId);
-                    PluginManager.get().reload(pluginId);
+
+                        LOGGER.atInfo().log("Reloading plugin: " + pluginId);
+                        PluginManager.get().reload(pluginId);
+                    }, 1000);
                 }
                 key.reset();
             }

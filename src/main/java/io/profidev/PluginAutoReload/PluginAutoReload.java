@@ -16,10 +16,12 @@ public class PluginAutoReload extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final @Nonnull List<PluginWatcher> watchers;
+    private final @Nonnull Debouncer debouncer;
 
     public PluginAutoReload(@Nonnull JavaPluginInit init) {
         super(init);
         watchers = new ArrayList<>();
+        debouncer = new Debouncer();
     }
 
     @Override
@@ -29,12 +31,12 @@ public class PluginAutoReload extends JavaPlugin {
 
         LOGGER.atInfo().log("Watching core mods directory: " + PluginManager.MODS_PATH);
         var path = PluginManager.MODS_PATH.toAbsolutePath();
-        watchers.add(new PluginWatcher(path, thisPluginId));
+        watchers.add(new PluginWatcher(path, thisPluginId, debouncer));
 
         for (var modsPath : Options.getOptionSet().valuesOf(Options.MODS_DIRECTORIES)) {
             LOGGER.atInfo().log("Watching mods directory: " + modsPath);
             var modsDirPath = modsPath.toAbsolutePath();
-            watchers.add(new PluginWatcher(modsDirPath, thisPluginId));
+            watchers.add(new PluginWatcher(modsDirPath, thisPluginId, debouncer));
         }
     }
 
@@ -57,6 +59,8 @@ public class PluginAutoReload extends JavaPlugin {
                 LOGGER.atWarning().withCause(e).log("Interrupted while waiting for watcher to stop.");
             }
         }
+
+        debouncer.shutdown();
         LOGGER.atInfo().log("Finished stopping directory watchers.");
     }
 }
