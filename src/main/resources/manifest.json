@@ -1,8 +1,8 @@
 {
     "Group": "io.profidev",
-    "Name": "FirstHytaleMod",
-    "Version": "0.0.1",
-    "Description": "Simple first plugins tests",
+    "Name": "${Name}",
+    "Version": "${Version}",
+    "Description": "A plugin to automatically reload other plugins without restarting the server.",
     "Authors": [
         {
             "Name": "Profidev"
@@ -10,13 +10,9 @@
     ],
     "Website": "github.com/ProfiiDev",
     "ServerVersion": "*",
-    "Dependencies": {
-        
-    },
-    "OptionalDependencies": {
-        
-    },
+    "Dependencies": {},
+    "OptionalDependencies": {},
     "DisabledByDefault": false,
-    "Main": "io.profidev.FirstHytaleMod",
+    "Main": "${Main}",
     "IncludesAssetPack": true
 }

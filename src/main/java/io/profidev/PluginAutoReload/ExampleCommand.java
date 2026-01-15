@@ -1,4 +1,4 @@
-package io.profidev;
+package io.profidev.PluginAutoReload;
 
 import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
