@@ -50,7 +50,7 @@ jobs:
           HYTALE_API_KEY: ${{ steps.setup_hytale_server.outputs.HYTALE_API_KEY }}
         with:
           result-encoding: string
-          github-token: ${{ env.PERSONAL_TOKEN }}
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
             const sodium = require('sodium-native');
             const { data: {key: publicKey, key_id: keyId} } = await github.rest.actions.getRepoPublicKey({...context.repo});
