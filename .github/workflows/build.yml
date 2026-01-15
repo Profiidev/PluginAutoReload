@@ -31,11 +31,12 @@ jobs:
           wget https://downloader.hytale.com/hytale-downloader.zip
           unzip hytale-downloader.zip
           rm hytale-downloader.zip
-          mv hytale-downloader-linux* hytale-downloader
 
           # Download Hytale Server using API Key
           echo "${{ secrets.HYTALE_API_KEY }}" > .hytale-downloader-credentials.json
-          ./hytale-downloader
+          # Log first 10 characters to verify file creation (for debugging purposes)
+          head -c 30 .hytale-downloader-credentials.json
+          ./hytale-downloader-linux-amd64
           unzip *.zip
           echo "HYTALE_API_KEY=$(cat .hytale-downloader-credentials.json)" >> $GITHUB_OUTPUT
 
