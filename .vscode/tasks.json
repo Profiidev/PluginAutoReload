@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Start Hytale Server",
+      "command": "java",
+      "args": [
+        "-Xmx4G",
+        "-Xms4G",
+        "-jar",
+        "~/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Server/HytaleServer.jar",
+        "--allow-op",
+        "--assets=~/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Assets.zip"
+      ],
+      "options": {
+        "cwd": "./run"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": ["gradle: build"]
+    }
+  ]
+}
