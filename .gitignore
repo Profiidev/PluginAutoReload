@@ -37,6 +37,7 @@ bin/
 /.nb-gradle/
 
 /.vscode/
+/testing/
 
 ### Mac OS ###
 .DS_Store
