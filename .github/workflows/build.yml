@@ -33,7 +33,7 @@ jobs:
           rm hytale-downloader.zip
 
           # Download Hytale Server using API Key
-          echo "${{ secrets.HYTALE_API_KEY }}" > .hytale-downloader-credentials.json
+          echo '${{ secrets.HYTALE_API_KEY }}' > .hytale-downloader-credentials.json
           # Log first 10 characters to verify file creation (for debugging purposes)
           head -c 30 .hytale-downloader-credentials.json
           ./hytale-downloader-linux-amd64
