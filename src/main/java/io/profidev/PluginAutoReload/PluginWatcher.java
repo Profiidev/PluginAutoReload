@@ -21,7 +21,7 @@ import java.util.jar.JarFile;
 public class PluginWatcher extends Thread {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     @SuppressWarnings("rawtypes")
-    private static final WatchEvent.Kind[] EVENTS = new WatchEvent.Kind[]{
+    private static final WatchEvent.Kind[] EVENTS = new WatchEvent.Kind[] {
             StandardWatchEventKinds.ENTRY_CREATE,
             StandardWatchEventKinds.ENTRY_MODIFY,
     };
@@ -60,7 +60,6 @@ public class PluginWatcher extends Thread {
                             return;
                         }
 
-
                         LOGGER.atInfo().log("Reloading plugin: " + pluginId);
                         PluginManager.get().reload(pluginId);
                     }, 1000);
@@ -84,8 +83,7 @@ public class PluginWatcher extends Thread {
             }
 
             try (var stream = jarFile.getInputStream(entry);
-                 var reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-            ) {
+                    var reader = new InputStreamReader(stream, StandardCharsets.UTF_8);) {
                 var buffer = RawJsonReader.READ_BUFFER.get();
                 var rawJsonreader = new RawJsonReader(reader, buffer);
                 var extraInfo = ExtraInfo.THREAD_LOCAL.get();
