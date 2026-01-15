@@ -36,6 +36,8 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+/.vscode/
+
 ### Mac OS ###
 .DS_Store
 

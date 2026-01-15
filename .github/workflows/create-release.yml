@@ -1,0 +1,25 @@
+name: Create Release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  create-release-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
+        uses: actions/checkout@v6
+
+      - name: Create tag
+        run: |
+          VERSION=${{ github.event.pull_request.head.ref }}
+          VERSION=${VERSION#chore/release-version-}
+          echo "Creating tag for version $VERSION"
+          git tag "$VERSION"
+          git push origin "$VERSION"

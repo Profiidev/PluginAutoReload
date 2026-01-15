@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "io.profidev"
-version = "0.0.1"
 
 ext {
     hytaleHome = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
