@@ -64,7 +64,7 @@ tasks.named('build') {
 }
 
 tasks.register('deploy', Copy) {
-    dependsOn shadowJar
+    dependsOn build
     from shadowJar.archiveFile
     into './run/mods'
 }
