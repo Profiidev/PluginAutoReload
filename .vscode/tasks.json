@@ -21,7 +21,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": ["gradle: build"]
+      "dependsOn": ["gradle: deploy"]
     }
   ]
 }
